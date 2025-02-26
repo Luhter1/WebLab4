@@ -1,25 +1,33 @@
 import { reactive, toValue  } from 'vue'
 
-export const store = reactive({
-  token: null,
-  auth: false,
 
-  set(token){
-    this.token = toValue(token);
-    this.auth = true;
+export const token_storage = reactive({
+
+  set_access_token(token){
+    localStorage.setItem("MY_access_token", toValue(token));
   },
 
-  get(){
-    if(this.auth) return this.token
-    else return null
+  set_refresh_token(token){
+    localStorage.setItem("MY_refresh_token", toValue(token));
   },
 
-  remove(){
-    this.token = null;
-    this.auth = false;
+  get_access_token(){
+    return localStorage.getItem("MY_access_token");
+  },
+
+  get_refresh_token(){
+    return localStorage.getItem("MY_refresh_token");
+  },
+
+  remove_access_token(){
+    localStorage.removeItem("MY_access_token");
+  },
+
+  remove_refresh_token(){
+    localStorage.removeItem("MY_refresh_token");
   },
 
   is_auth(){
-    return this.auth;
+    return this.get_refresh_token() !== null;
   }
 })

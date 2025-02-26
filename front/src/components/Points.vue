@@ -1,7 +1,7 @@
 <script setup>
     import {onMounted, ref, watch, toValue } from 'vue'
     import { useFetch } from '../func/fetch'
-    import { store } from '../func/token'
+    import { token_storage } from '../func/token'
     import { is_valid } from '../func/validate'
     import { drawGraph, clearCanvas, drawPoint } from '../func/canvas'
 
@@ -28,7 +28,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${store.get()}`,
+                "Authorization": `Bearer ${token_storage.get_access_token()}`,
             },
             body: JSON.stringify({
                 x: toValue(X),
@@ -76,7 +76,7 @@
         const requestContent = {
             method: "GET",
             headers:{
-                "Authorization": `Bearer ${store.get()}`
+                "Authorization": `Bearer ${token_storage.get_access_token()}`
             }
         };
 

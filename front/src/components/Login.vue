@@ -1,7 +1,7 @@
 <script setup>
   import {ref} from 'vue'
   import { useFetch } from '../func/fetch'
-  import { store } from '../func/token'
+  import { token_storage } from '../func/token'
 
   const login = ref("");
   const pwd = ref("");
@@ -24,14 +24,15 @@
 
 
     (async () => {
-      let token = await useFetch(
+      let answ = await useFetch(
         "api/login", 
         requestContent, 
         msg409
       );
 
-      if(token !== null){
-         store.set(token.token);
+      if(answ !== null){
+         token_storage.set_access_token(answ.access_token);
+         token_storage.set_refresh_token(answ.refresh_token);
          window.location.hash = '#/';
       }
 
@@ -44,7 +45,7 @@
 
 <template>
   <div v-show="show" class="page-error text-center mx-auto mt-3">
-    <h4 v-show='!store.is_auth()' class="error-404">{{ msg409 }}</h4>
+    <h4 v-show='!token_storage.is_auth()' class="error-404">{{ msg409 }}</h4>
   </div>
   
   <div class="container mt-3">

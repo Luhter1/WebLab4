@@ -49,7 +49,7 @@ public class AuthService {
         logger.info("Password: " + passwordEncoder.encode(newUser.getPassword()));
 
 
-        return jwtUtil.generateToken(user.getUsername());
+        return jwtUtil.generateToken(user.getUsername(), 1000 * 60);
     }
 
     public String login(User presentUser) throws UsernameNotFoundException {
@@ -60,7 +60,7 @@ public class AuthService {
 
         User user = userRepository.findByUsername(presentUser.getUsername()).orElseThrow(() -> new UsernameNotFoundException("UserNotFound"));
 
-        return jwtUtil.generateToken(user.getUsername());
+        return jwtUtil.generateToken(user.getUsername(), 1000 * 60);
     }
 
 

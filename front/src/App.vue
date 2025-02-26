@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-import { store } from './func/token'
+import { token_storage } from './func/token'
+import { logout_token } from './func/fetch'
+
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
 import Points from './components/Points.vue'
@@ -21,8 +23,9 @@ window.addEventListener('hashchange', () => {
 })
 
 const currentView = computed(() => {
+
   // проверка на регистрацию
-  if(!store.is_auth()){
+  if(!token_storage.is_auth()){
     if(currentPath.value.slice(1) === '/register'){
        return Register;
     }
@@ -32,7 +35,9 @@ const currentView = computed(() => {
   }  
 
   if(currentPath.value.slice(1) === '/logout'){
-    store.remove();
+    logout_token();
+    token_storage.remove_refresh_token();
+    token_storage.remove_access_token();
     window.location.hash = '#/login';
     return Login;
   }
@@ -62,7 +67,7 @@ const currentView = computed(() => {
           </ul>
         </div>
 
-        <div class="header-btn" v-if='store.is_auth()'>
+        <div class="header-btn" v-if='token_storage.is_auth()'>
           <a href="#/logout" class="btn">Exit</a>
         </div>
         <div class="header-btn" v-else>
@@ -73,9 +78,9 @@ const currentView = computed(() => {
       </div>
       <div class="toggle">
             <a href="#/" class="btn">Главная</a>
-            <a v-if='store.is_auth()' href="#/logout" class="btn">Exit</a>
-            <a v-if='!store.is_auth()' href="#/register" class="btn">Sign up</a>
-            <a v-if='!store.is_auth()' href="#/login" class="btn">Login</a>
+            <a v-if='token_storage.is_auth()' href="#/logout" class="btn">Exit</a>
+            <a v-if='!token_storage.is_auth()' href="#/register" class="btn">Sign up</a>
+            <a v-if='!token_storage.is_auth()' href="#/login" class="btn">Login</a>
       </div>
   </header>
 
